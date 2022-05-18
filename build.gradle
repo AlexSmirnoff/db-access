@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'demo.elitedata'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	springVersion = '2.6.7'
+	lombokVersion = '1.18.22'
+	pgDriverVersion = '42.3.3'
+	mapstructVersion = '1.4.2.Final'
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
+	implementation "org.springframework.boot:spring-boot-starter-data-rest:$springVersion"
+	implementation "org.springframework.boot:spring-boot-starter-web:$springVersion"
+	implementation "org.mapstruct:mapstruct:$mapstructVersion"
+
+	compileOnly "org.projectlombok:lombok:$lombokVersion"
+	runtimeOnly "org.postgresql:postgresql:$pgDriverVersion"
+	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+	testImplementation "org.springframework.boot:spring-boot-starter-test:$springVersion"
+	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+}
+
+sourceSets.main.java.srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
